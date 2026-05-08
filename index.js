@@ -8,6 +8,17 @@ app.use(bodyParser.json());
 // ==========================
 // RED SEMÁNTICA
 // ==========================
+const perfilesRecomendados = {
+  "ácido": "vino blanco",
+  "fresco": "vino blanco",
+  "ácido y fresco": "vino blanco",
+  "tánico": "vino tinto",
+  "robusto": "vino tinto",
+  "tánico y robusto": "vino tinto",
+  "afrutado": "vino rosado",
+  "suave": "vino rosado",
+  "afrutado y suave": "vino rosado"
+};
 const recomendaciones = {
   "vino tinto": "carne roja, quesos maduros y pasta",
   "vino blanco": "pescado, mariscos y ensaladas",
@@ -254,17 +265,36 @@ else if (intentName === "Recomendacion_Deldia") {
 }
 
 else if (intentName === "Recomendacion_perfil") {
+    // 1. Extraer el parámetro (asegúrate que en Dialogflow se llame perfil_gusto)
+    const gusto = params.perfil_gusto ? params.perfil_gusto.toLowerCase() : null;
 
-  const perfil = params.perfil_gusto.toLowerCase();
+    if (!gusto) {
+      return res.json({ fulfillmentText: "No logré identificar el perfil. ¿Buscas algo ácido, tánico o afrutado?" });
+    }
 
-  const vino = perfilesRecomendados[perfil];
+    // 2. BUSQUEDA FLEXIBLE: Revisamos si el gusto del usuario está contenido en tus llaves
+    // Esto permite que si el usuario dice "ácido", coincida con "ácido y fresco"
+    let tipoEncontrado = null;
+    
+    // Recorremos tus llaves de perfilesRecomendados
+    for (let llave in perfilesRecomendados) {
+      if (llave.includes(gusto)) {
+        tipoEncontrado = perfilesRecomendados[llave];
+        break; 
+      }
+    }
 
-  if (vino) {
-    responseText = `Te recomiendo un ${vino} porque tiene un perfil ${perfil}.`;
-  } else {
-    responseText = `No encontré recomendaciones para el perfil ${perfil}.`;
+    if (tipoEncontrado) {
+      responseText = `Los vinos con perfil ${gusto} suelen ser los de tipo ${tipoEncontrado}.`;
+      
+      // 3. MOSTRAR IMAGEN AUTOMÁTICAMENTE
+      // Usamos tu función buildRichResponse para que busque la foto en imagenesVino[tipoEncontrado]
+      return res.json(buildRichResponse(responseText, tipoEncontrado));
+      
+    } else {
+      responseText = `No encontré vinos que coincidan exactamente con el perfil: ${gusto}.`;
+    }
   }
-}
 
   // ==========================
   // RESPUESTA FINAL
