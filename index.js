@@ -155,6 +155,7 @@ app.post('/webhook', (req, res) => {
 
     if (perfil) {
       responseText = `El ${tipo} tiene un perfil ${perfil}.`;
+      return res.json(buildRichResponse(responseText, tipo));
     } else {
       responseText = `No encontré el perfil de ${tipo}.`;
     }
