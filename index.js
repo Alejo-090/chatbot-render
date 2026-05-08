@@ -53,9 +53,60 @@ const bodegas = {
   "chardonnay premium": "Casa Grajales"
 };
 
-// ==========================
+
+const imagenesVino = {
+  "vino tinto":   "https://images.vivino.com/thumbs/ApnIiXjcT5Kc33OHgNb9dA_pb_x600.png",
+  "vino blanco":  "https://images.vivino.com/thumbs/aA4o41YFiHnbm48FMp4ikQ_pb_x600.png",
+  "vino rosado":  "https://images.vivino.com/thumbs/u7TBDKFo6KHJN_BNBgUXOw_pb_x600.png"
+};
+
+const linksVino = {
+  "vino tinto":  "https://www.vivino.com/explore?e=eJwFwUEKgCAQAMCv7LkH6C_aS0iiRa0ou2HQx3f3BjMDAAAAAA==",
+  "vino blanco": "https://www.vivino.com/explore?e=eJwFwTEKgDAMBdCrZO4B9CP2IoVoWQ0apBiK8e5u78EAAAAAAAAg",
+  "vino rosado": "https://www.vivino.com/explore?e=eJwFwTEOgCAMBdCrNHcP4Ec0RgotJUGBkBiP727fAwAAAAAAAAA="
+};
+
+
+// HELPER: Construir Rich Response
+
+
+function buildRichResponse(text, tipo) {
+  const img = imagenesVino[tipo];
+  const link = linksVino[tipo];
+
+  // Si no hay imagen/link, solo texto
+  if (!img || !link) {
+    return { fulfillmentText: text };
+  }
+
+  return {
+    fulfillmentText: text,
+    fulfillmentMessages: [
+      // 1. Texto principal
+      {
+        text: { text: [text] }
+      },
+      // 2. Card con imagen y botón
+      {
+        card: {
+          title: tipo.charAt(0).toUpperCase() + tipo.slice(1),
+          subtitle: text,
+          imageUri: img,
+          buttons: [
+            {
+              text: "Ver más vinos 🍷",
+              postback: link
+            }
+          ]
+        }
+      }
+    ]
+  };
+}
+
+
 // WEBHOOK
-// ==========================
+
 
 app.post('/webhook', (req, res) => {
 
@@ -65,9 +116,9 @@ app.post('/webhook', (req, res) => {
 
   let responseText = "No entendí la consulta.";
 
-  // ==========================
+  
   // CONSULTAR MARIDAJE
-  // ==========================
+ 
 
   if (intentName === "Consultar_maridaje") {
 
@@ -82,9 +133,8 @@ app.post('/webhook', (req, res) => {
     }
   }
 
-  // ==========================
   // CONSULTAR PERFIL
-  // ==========================
+ 
 
   else if (intentName === "Consultar_perfil") {
 
@@ -99,9 +149,9 @@ app.post('/webhook', (req, res) => {
     }
   }
 
-  // ==========================
+ 
   // CONSULTAR TIPO DE VINO
-  // ==========================
+ 
 
   else if (intentName === "Consultar_tipo") {
 
@@ -116,9 +166,9 @@ app.post('/webhook', (req, res) => {
     }
   }
 
-  // ==========================
+  
   // CONSULTAR UVA
-  // ==========================
+ 
 
   else if (intentName === "Consultar_Uva") {
 
@@ -133,9 +183,9 @@ app.post('/webhook', (req, res) => {
     }
   }
 
-  // ==========================
+ 
   // CONSULTAR BODEGA
-  // ==========================
+
 
   else if (intentName === "Consultar_bodega") {
 
