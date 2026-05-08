@@ -8,7 +8,23 @@ app.use(bodyParser.json());
 // ==========================
 // RED SEMÁNTICA
 // ==========================
+const recomendaciones = {
+  "vino tinto": "carne roja, quesos maduros y pasta",
+  "vino blanco": "pescado, mariscos y ensaladas",
+  "vino rosado": "pasta, pollo y aperitivos"
+};
 
+const recomendacionDelDia = [
+  "Hoy te recomendamos un Cabernet Reserva, perfecto para una noche especial.",
+  "Prueba hoy un Chardonnay Premium, ideal para acompañar mariscos.",
+  "Nuestra recomendación del día es un vino rosado, fresco y afrutado."
+];
+
+const perfilesRecomendados = {
+  "ácido y fresco": "vino blanco",
+  "tánico y robusto": "vino tinto",
+  "afrutado y suave": "vino rosado"
+};
 const maridajes = {
   "pescado": "vino blanco",
   "mariscos": "vino blanco",
@@ -135,25 +151,10 @@ app.post('/webhook', (req, res) => {
   }
 
 
-const recomendaciones = {
-  "vino tinto": "carne roja, quesos maduros y pasta",
-  "vino blanco": "pescado, mariscos y ensaladas",
-  "vino rosado": "pasta, pollo y aperitivos"
-};
 
-const recomendacionDelDia = [
-  "Hoy te recomendamos un Cabernet Reserva, perfecto para una noche especial.",
-  "Prueba hoy un Chardonnay Premium, ideal para acompañar mariscos.",
-  "Nuestra recomendación del día es un vino rosado, fresco y afrutado."
-];
 
-const perfilesRecomendados = {
-  "ácido y fresco": "vino blanco",
-  "tánico y robusto": "vino tinto",
-  "afrutado y suave": "vino rosado"
-};
 
-  else if (intentName === "Recomendacion_Comida") {
+else if (intentName === "Recomendacion_Comida") {
 
   const vino = params.vino.toLowerCase();
 
