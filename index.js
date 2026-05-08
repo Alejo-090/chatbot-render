@@ -134,6 +134,42 @@ app.post('/webhook', (req, res) => {
     }
   }
 
+  else if (intentName === "Recomendar_Comida") {
+
+  const vino = params.vino.toLowerCase();
+
+  const recomendacion = recomendaciones[vino];
+
+  if (recomendacion) {
+    responseText = `El ${vino} combina muy bien con ${recomendacion}.`;
+  } else {
+    responseText = `No tengo recomendaciones para ${vino}.`;
+  }
+}
+
+else if (intentName === "Recomendacion_Del_Dia") {
+
+  const random =
+    recomendacionDelDia[
+      Math.floor(Math.random() * recomendacionDelDia.length)
+    ];
+
+  responseText = random;
+}
+
+else if (intentName === "Recomendar_Por_Perfil") {
+
+  const perfil = params.perfil_gusto.toLowerCase();
+
+  const vino = perfilesRecomendados[perfil];
+
+  if (vino) {
+    responseText = `Te recomiendo un ${vino} porque tiene un perfil ${perfil}.`;
+  } else {
+    responseText = `No encontré recomendaciones para el perfil ${perfil}.`;
+  }
+}
+
   // ==========================
   // RESPUESTA FINAL
   // ==========================
