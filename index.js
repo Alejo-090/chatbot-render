@@ -159,7 +159,7 @@ else if (intentName === "Recomendacion_Deldia") {
 
 else if (intentName === "Recomendacion_perfil") {
 
-  const perfil = params.perfil_gusto.toLowerCase();
+  const perfil = params.perfil.toLowerCase();
 
   const vino = perfilesRecomendados[perfil];
 
