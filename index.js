@@ -134,7 +134,7 @@ app.post('/webhook', (req, res) => {
     }
   }
 
-  else if (intentName === "Recomendar_Comida") {
+  else if (intentName === "Recomendacion_Comida") {
 
   const vino = params.vino.toLowerCase();
 
@@ -147,7 +147,7 @@ app.post('/webhook', (req, res) => {
   }
 }
 
-else if (intentName === "Recomendacion_Del_Dia") {
+else if (intentName === "Recomendacion_Deldia") {
 
   const random =
     recomendacionDelDia[
@@ -157,7 +157,7 @@ else if (intentName === "Recomendacion_Del_Dia") {
   responseText = random;
 }
 
-else if (intentName === "Recomendar_Por_Perfil") {
+else if (intentName === "Recomendacion_perfil") {
 
   const perfil = params.perfil_gusto.toLowerCase();
 
