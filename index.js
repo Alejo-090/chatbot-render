@@ -195,61 +195,38 @@ app.post('/webhook', (req, res) => {
   }
 
 // CONSULTAR INFORMACIÓN COMPLETA DE UN VINO
- if (intentName === "Consultar_informacion_vino") {
+ // 1. CONSULTAR BODEGA
+  if (intentName === "Consultar_bodega") {
     const vino = params.vino.toLowerCase();
-    const ficha = fichasVinos[vino]; // Busca la info que agregamos arriba
-    const tipo = tiposVino[vino];    // Busca si es tinto/blanco
-
-    if (ficha) {
-      responseText = `🍷 *${vino.toUpperCase()}*\n\n${ficha.descripcion}\n\nUva: ${uvas[vino]}\nBodega: ${bodegas[vino]}\nMaridaje sugerido: ${ficha.maridaje}`;
-      
-      // EXPLICACIÓN: Aquí es donde se construye la imagen. 
-      // Enviamos el objeto JSON que Dialogflow entiende como una "Card"
-      return res.json({
-        fulfillmentText: responseText,
-        fulfillmentMessages: [
-          {
-            text: { text: [responseText] }
-          },
-          {
-            card: {
-              title: vino.toUpperCase(),
-              subtitle: "Ficha Técnica",
-              imageUri: ficha.imagen, // AQUÍ SE MUESTRA LA IMAGEN
-              buttons: [
-                {
-                  text: "Ver en Vivino 🍷",
-                  postback: linksVino[tipo]
-                }
-              ]
-            }
-          }
-        ]
-      });
-    }
-  }
-
-  // Si no es el intent de info, o no se encontró el vino, respuesta normal:
-  res.json({ fulfillmentText: responseText });
- 
-  // CONSULTAR BODEGA
-
-
-  else if (intentName === "Consultar_bodega") {
-
-    const vino = params.vino.toLowerCase();
-
     const bodega = bodegas[vino];
-
     if (bodega) {
       responseText = `${vino} es producido por ${bodega}.`;
     } else {
-      responseText = `No encontré información sobre la bodega de ${vino}.`;
+      responseText = `No encontré la bodega de ${vino}.`;
     }
   }
 
+  // 2. CONSULTAR INFORMACIÓN DETALLADA (Aquí es donde se busca info de CADA vino)
+  else if (intentName === "Consultar_informacion_vino") {
+    const vino = params.vino.toLowerCase();
+    
+    // Buscamos en tus constantes existentes
+    const tipo = tiposVino[vino];
+    const uva = uvas[vino];
+    const bodega = bodegas[vino];
 
+    if (tipo && uva) {
+      responseText = `Ficha técnica de ${vino.toUpperCase()}:\n• Tipo: ${tipo}\n• Uva: ${uva}\n• Bodega: ${bodega}`;
+      
+      // AQUÍ SE MUESTRA LA IMAGEN: 
+      // Usamos return para enviar la Card y que el código no siga bajando
+      return res.json(buildRichResponse(responseText, tipo));
+    } else {
+      responseText = `Lo siento, no tengo la ficha completa de ${vino}.`;
+    }
+  }
 
+ 
 
 
 else if (intentName === "Recomendacion_Comida") {
