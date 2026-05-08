@@ -8,6 +8,7 @@ app.use(bodyParser.json());
 // ==========================
 // RED SEMÁNTICA
 // ==========================
+
 const perfilesRecomendados = {
   "ácido": "vino blanco",
   "fresco": "vino blanco",
@@ -19,6 +20,7 @@ const perfilesRecomendados = {
   "suave": "vino rosado",
   "afrutado y suave": "vino rosado"
 };
+
 const recomendaciones = {
   "vino tinto": "carne roja, quesos maduros y pasta",
   "vino blanco": "pescado, mariscos y ensaladas",
