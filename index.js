@@ -53,7 +53,7 @@ app.post('/webhook', (req, res) => {
   // CONSULTAR MARIDAJE
   // ==========================
 
-  if (intentName === "Consultar_Maridaje") {
+  if (intentName === "Consultar_maridaje") {
 
     const comida = params.comida.toLowerCase();
 
@@ -70,7 +70,7 @@ app.post('/webhook', (req, res) => {
   // CONSULTAR PERFIL
   // ==========================
 
-  else if (intentName === "Consultar_Perfil") {
+  else if (intentName === "Consultar_perfil") {
 
     const tipo = params.tipo_vino.toLowerCase();
 
@@ -87,7 +87,7 @@ app.post('/webhook', (req, res) => {
   // CONSULTAR TIPO DE VINO
   // ==========================
 
-  else if (intentName === "Consultar_Tipo_Vino") {
+  else if (intentName === "Consultar_tipo") {
 
     const vino = params.vino.toLowerCase();
 
@@ -121,7 +121,7 @@ app.post('/webhook', (req, res) => {
   // CONSULTAR BODEGA
   // ==========================
 
-  else if (intentName === "Consultar_Bodega") {
+  else if (intentName === "Consultar_bodega") {
 
     const vino = params.vino.toLowerCase();
 
