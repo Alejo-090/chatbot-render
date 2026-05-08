@@ -66,7 +66,18 @@ const linksVino = {
   "vino rosado": "https://www.vivino.com/explore?e=eJwFwTEOgCAMBdCrNHcP4Ec0RgotJUGBkBiP727fAwAAAAAAAAA="
 };
 
-
+const fichasVinos = {
+  "cabernet reserva": {
+    descripcion: "Un vino elegante con notas de frutos rojos y un toque de vainilla por su paso en barrica.",
+    maridaje: "Ideal para carnes asadas y quesos fuertes.",
+    imagen: "https://images.vivino.com/thumbs/ApnIiXjcT5Kc33OHgNb9dA_pb_x600.png"
+  },
+  "chardonnay premium": {
+    descripcion: "Un blanco vibrante con aromas a piña, cítricos y un final persistente.",
+    maridaje: "Perfecto con salmón, pastas cremosas y mariscos.",
+    imagen: "https://images.vivino.com/thumbs/aA4o41YFiHnbm48FMp4ikQ_pb_x600.png"
+  }
+};
 // HELPER: Construir Rich Response
 
 
@@ -184,22 +195,42 @@ app.post('/webhook', (req, res) => {
   }
 
 // CONSULTAR INFORMACIÓN COMPLETA DE UN VINO
-  else if (intentName === "Consultar_informacion") {
+ if (intentName === "Consultar_informacion_vino") {
     const vino = params.vino.toLowerCase();
-    
-    const tipo = tiposVino[vino];
-    const uva = uvas[vino];
-    const bodega = bodegas[vino];
+    const ficha = fichasVinos[vino]; // Busca la info que agregamos arriba
+    const tipo = tiposVino[vino];    // Busca si es tinto/blanco
 
-    if (tipo && uva && bodega) {
-      responseText = `El ${vino.toUpperCase()} es un ${tipo}, elaborado con uva ${uva} en la bodega ${bodega}.`;
+    if (ficha) {
+      responseText = `🍷 *${vino.toUpperCase()}*\n\n${ficha.descripcion}\n\nUva: ${uvas[vino]}\nBodega: ${bodegas[vino]}\nMaridaje sugerido: ${ficha.maridaje}`;
       
-      // Enviamos respuesta rica usando tu función buildRichResponse
-      return res.json(buildRichResponse(responseText, tipo));
-    } else {
-      responseText = `Lo siento, no tengo la ficha técnica completa de ${vino}.`;
+      // EXPLICACIÓN: Aquí es donde se construye la imagen. 
+      // Enviamos el objeto JSON que Dialogflow entiende como una "Card"
+      return res.json({
+        fulfillmentText: responseText,
+        fulfillmentMessages: [
+          {
+            text: { text: [responseText] }
+          },
+          {
+            card: {
+              title: vino.toUpperCase(),
+              subtitle: "Ficha Técnica",
+              imageUri: ficha.imagen, // AQUÍ SE MUESTRA LA IMAGEN
+              buttons: [
+                {
+                  text: "Ver en Vivino 🍷",
+                  postback: linksVino[tipo]
+                }
+              ]
+            }
+          }
+        ]
+      });
     }
   }
+
+  // Si no es el intent de info, o no se encontró el vino, respuesta normal:
+  res.json({ fulfillmentText: responseText });
  
   // CONSULTAR BODEGA
 
