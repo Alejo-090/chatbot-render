@@ -183,6 +183,23 @@ app.post('/webhook', (req, res) => {
     }
   }
 
+// CONSULTAR INFORMACIÓN COMPLETA DE UN VINO
+  else if (intentName === "Consultar_informacion") {
+    const vino = params.vino.toLowerCase();
+    
+    const tipo = tiposVino[vino];
+    const uva = uvas[vino];
+    const bodega = bodegas[vino];
+
+    if (tipo && uva && bodega) {
+      responseText = `El ${vino.toUpperCase()} es un ${tipo}, elaborado con uva ${uva} en la bodega ${bodega}.`;
+      
+      // Enviamos respuesta rica usando tu función buildRichResponse
+      return res.json(buildRichResponse(responseText, tipo));
+    } else {
+      responseText = `Lo siento, no tengo la ficha técnica completa de ${vino}.`;
+    }
+  }
  
   // CONSULTAR BODEGA
 
